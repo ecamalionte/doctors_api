@@ -20,7 +20,9 @@ defmodule DoctorsApi.Router do
   end
 
   # Other scopes may use custom stacks.
-  # scope "/api", DoctorsApi do
-  #   pipe_through :api
-  # end
+  scope "/api", DoctorsApi do
+    pipe_through :api
+
+    get "/", WelcomeApiController, :index
+  end
 end
