@@ -1,0 +1,9 @@
+defmodule DoctorsApi.WelcomeApiControllerTest do
+  use DoctorsApi.ConnCase
+
+  test "GET /", %{conn: conn} do
+    conn = get conn, "/api"
+    expected = %{"data" => "Welcome to DoctorsApi in Json!!!"}
+    assert json_response(conn, 200) == expected
+  end
+end
