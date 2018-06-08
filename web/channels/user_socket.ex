@@ -2,7 +2,7 @@ defmodule DoctorsApi.UserSocket do
   use Phoenix.Socket
 
   ## Channels
-  # channel "room:*", DoctorsApi.RoomChannel
+  channel "room:*", DoctorsApi.RoomChannel
 
   ## Transports
   transport :websocket, Phoenix.Transports.WebSocket
