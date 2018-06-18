@@ -38,5 +38,7 @@ defmodule DoctorsApi.Endpoint do
     key: "_doctors_api_key",
     signing_salt: "RJDRfBsv"
 
+  plug CORSPlug
+
   plug DoctorsApi.Router
 end
