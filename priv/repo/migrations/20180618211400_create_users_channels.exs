@@ -5,6 +5,8 @@ defmodule DoctorsApi.Repo.Migrations.CreateUsersChannels do
     create table(:users_channels) do
       add :user_id, references(:users)
       add :channel_id, references(:channels)
+
+      timestamps()
     end
 
     create unique_index(:users_channels, [:user_id, :channel_id])

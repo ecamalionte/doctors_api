@@ -7,6 +7,8 @@ defmodule DoctorsApi.Repo.Migrations.CreateUser do
       add :login, :string
       add :email, :string
       add :password, :string
+
+      timestamps()
     end
   end
 end
