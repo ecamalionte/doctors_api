@@ -24,5 +24,6 @@ defmodule DoctorsApi.Router do
     pipe_through :api
 
     get "/", WelcomeApiController, :index
+    resources "/users", UserController, except: [:new, :edit]
   end
 end

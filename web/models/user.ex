@@ -3,8 +3,8 @@ defmodule DoctorsApi.User do
 
   schema "users" do
     field :name, :string
-    field :login, :string
     field :email, :string
+    field :login, :string
     field :password, :string
 
     timestamps()
@@ -12,9 +12,12 @@ defmodule DoctorsApi.User do
     many_to_many :channels, DoctorsApi.Channel, join_through: "users_channels"
   end
 
+  @doc """
+  Builds a changeset based on the `struct` and `params`.
+  """
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:name, :login, :email, :password])
-    |> validate_required([:name, :login, :email, :password])
+    |> cast(params, [:name, :email, :login, :password])
+    |> validate_required([:name, :email, :login, :password])
   end
 end

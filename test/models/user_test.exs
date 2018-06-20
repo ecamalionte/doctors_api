@@ -3,20 +3,23 @@ defmodule DoctorsApi.UserTest do
 
   alias DoctorsApi.User
 
-  @valid_attrs %{name: "Fulano", login: "fulaninho", email: "ful@lano", password: "1234"}
+  @valid_attrs %{email: "some content", login: "some content", name: "some content", password: "some content"}
   @invalid_attrs %{}
 
-  test "Changeset with valid attributes" do
+  test "changeset with valid attributes" do
     changeset = User.changeset(%User{}, @valid_attrs)
     assert changeset.valid?
   end
 
-  test "Changeset with invalid attributes" do
+  test "changeset with invalid attributes" do
     changeset = User.changeset(%User{}, @invalid_attrs)
     refute changeset.valid?
   end
 
-  test "Association with Channels" do
-    IO.puts "pending"
+  test "association with Channels" do
+    changeset = User.changeset(%User{}, @valid_attrs)
+    user = Repo.insert!(changeset)
+           |> Repo.preload([:channels])
+    assert user.channels == []
   end
 end
