@@ -13,7 +13,6 @@ defmodule DoctorsApi.UserView do
     %{id: user.id,
       name: user.name,
       email: user.email,
-      login: user.login,
-      password: user.password}
+      login: user.login}
   end
 end

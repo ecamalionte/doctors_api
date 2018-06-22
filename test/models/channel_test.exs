@@ -17,6 +17,9 @@ defmodule DoctorsApi.ChannelTest do
   end
 
   test "Association with Users" do
-    IO.puts "pending"
+    changeset = Channel.changeset(%Channel{}, @valid_attrs)
+    user = Repo.insert!(changeset)
+    |> Repo.preload([:users])
+    assert user.users == []
   end
 end
