@@ -11,6 +11,8 @@ defmodule DoctorsApi.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
+    plug Guardian.Plug.VerifyHeader, realm: "Bearer"
+    plug Guardian.Plug.LoadResource, allow_blank: true
   end
 
   scope "/", DoctorsApi do
@@ -25,5 +27,8 @@ defmodule DoctorsApi.Router do
 
     get "/", WelcomeApiController, :index
     resources "/users", UserController, except: [:new, :edit]
+
+    post "/sessions", SessionsController, :create #login
+    delete "/sessions", SessionsController, :delete #logout
   end
 end

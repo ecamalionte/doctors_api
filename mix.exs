@@ -19,7 +19,7 @@ defmodule DoctorsApi.Mixfile do
   def application do
     [mod: {DoctorsApi, []},
      applications: [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger, :gettext,
-                    :phoenix_ecto, :postgrex, :comeonin]]
+                    :phoenix_ecto, :postgrex, :comeonin, :guardian]]
   end
 
   # Specifies which paths to compile per environment.
@@ -39,7 +39,8 @@ defmodule DoctorsApi.Mixfile do
      {:gettext, "~> 0.11"},
      {:cors_plug, "~> 1.5"},
      {:cowboy, "~> 1.0"},
-     {:comeonin, "~> 2.6"}]
+     {:comeonin, "~> 2.6"},
+     {:guardian, "~> 1.0"}]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.

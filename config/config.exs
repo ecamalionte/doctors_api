@@ -22,6 +22,16 @@ config :logger, :console,
   format: "$time $metadata[$level] $message\n",
   metadata: [:request_id]
 
+# Configures Guardian for API Authentication
+config :guardian, Guardian,
+  issuer: "DoctorsApi",
+  ttl: {30, :minutes},
+  verify_issuer: true,
+  serializer: DoctorsApi.GuardianSerializer,
+  secrets: "6beKAhkUUdvDrJYzPlwAothR34ddjSTT5kBCUO9oV2ckB5lhBwLH/kpFnReNq1u6",
+  error_handler: DoctorsApi.AuthErrorHandler
+
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env}.exs"
