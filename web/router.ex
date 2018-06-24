@@ -22,7 +22,7 @@ defmodule DoctorsApi.Router do
   # Other scopes may use custom stacks.
   scope "/api", DoctorsApi do
     pipe_through :api
-
     get "/", WelcomeApiController, :index
+    post "/auth", Api.AuthController, :auth
   end
 end
