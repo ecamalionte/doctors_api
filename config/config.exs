@@ -23,13 +23,11 @@ config :logger, :console,
   metadata: [:request_id]
 
 # Configures Guardian for API Authentication
-config :guardian, Guardian,
+config :guardian, DoctorsApi.Guardian,
   issuer: "DoctorsApi",
   ttl: {30, :minutes},
   verify_issuer: true,
-  serializer: DoctorsApi.GuardianSerializer,
-  secrets: "6beKAhkUUdvDrJYzPlwAothR34ddjSTT5kBCUO9oV2ckB5lhBwLH/kpFnReNq1u6",
-  error_handler: DoctorsApi.AuthErrorHandler
+  secrets: "6beKAhkUUdvDrJYzPlwAothR34ddjSTT5kBCUO9oV2ckB5lhBwLH/kpFnReNq1u6"
 
 
 # Import environment specific config. This must remain at the bottom
