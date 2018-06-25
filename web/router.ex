@@ -28,14 +28,13 @@ defmodule DoctorsApi.Router do
     pipe_through :api
 
     get "/", WelcomeApiController, :index
-    resources "/users", UserController, only: [:create]
-
-    post "/sessions", SessionsController, :create #login
-    delete "/sessions", SessionsController, :delete #logout
+    post "/register", UserController, :create
+    post "/login", SessionsController, :create
   end
 
   scope "/api", DoctorsApi do
     pipe_through [:api, :authenticated]
     resources "/users", UserController, only: [:index, :show]
+    delete "/logout", SessionsController, :delete
   end
 end

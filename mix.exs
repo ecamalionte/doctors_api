@@ -40,7 +40,8 @@ defmodule DoctorsApi.Mixfile do
      {:cors_plug, "~> 1.5"},
      {:cowboy, "~> 1.0"},
      {:comeonin, "~> 2.6"},
-     {:guardian, "~> 1.0"}]
+     {:guardian, "~> 1.0"},
+     {:ex_machina, "~> 2.2", only: :test}]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.

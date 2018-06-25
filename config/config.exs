@@ -13,7 +13,7 @@ config :doctors_api,
 config :doctors_api, DoctorsApi.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "nsqASUbUAHfyvg9S8C+n9FriGUCSAVEQfHmz5ql1z5rlIBQMDd0GLbx/L8zhZudl",
-  render_errors: [view: DoctorsApi.ErrorView, accepts: ~w(html json)],
+  render_errors: [view: DoctorsApi.ErrorView, accepts: ~w(json)],
   pubsub: [name: DoctorsApi.PubSub,
            adapter: Phoenix.PubSub.PG2]
 
@@ -25,9 +25,7 @@ config :logger, :console,
 # Configures Guardian for API Authentication
 config :guardian, DoctorsApi.Guardian,
   issuer: "DoctorsApi",
-  ttl: {30, :minutes},
-  verify_issuer: true,
-  secrets: "6beKAhkUUdvDrJYzPlwAothR34ddjSTT5kBCUO9oV2ckB5lhBwLH/kpFnReNq1u6"
+  secret_key: "csPOKcLdIvGTb+zlHrV0ZLOox+mi7cQu0oURWz/O78gIRyJpX7SOMstKIGryfwtI"
 
 
 # Import environment specific config. This must remain at the bottom

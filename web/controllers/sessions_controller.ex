@@ -2,14 +2,16 @@ defmodule DoctorsApi.SessionsController do
   use DoctorsApi.Web, :controller
 
   alias DoctorsApi.User
+  alias DoctorsApi.Guardian
 
   def create(conn, %{ "login" => login, "password" => password}) do
     case authenticate(login, password) do
       {:ok, user} ->
         IO.inspect("AQUI::::>>>>")
         IO.inspect(user)
-        new_conn = Guardian.Plug.sign_in(conn, user, %{}, [], %{})
+        new_conn = Guardian.Plug.sign_in(conn, user)
         jwt = Guardian.Plug.current_token(new_conn)
+        IO.inspect("Json Web Token: #{jwt}")
 
         new_conn
       :error ->
