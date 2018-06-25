@@ -24,5 +24,6 @@ defmodule DoctorsApi.Router do
     pipe_through :api
     get "/", WelcomeApiController, :index
     post "/auth", Api.AuthController, :auth
+    post "/auth/token", Api.AuthController, :auth_token
   end
 end
