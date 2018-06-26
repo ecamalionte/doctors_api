@@ -1,33 +1,36 @@
+require IEx
+
 defmodule DoctorsApi.Guardian do
   use Guardian, otp_app: :doctors_api
 
-  def subject_for_token(resource, _claims) do
-    {:ok, to_string(resource.id)}
+  alias DoctorsApi.{Repo, User}
+
+  def subject_for_token(user, _claims) do
+    {:ok, to_string(user.id)}
   end
 
-  def subject_for_token(_, _) do
-    {:error, :reason_for_error}
-  end
-
-  def resource_from_claims(claims) do
-    {:error, :not_implemented}
-  end
-  def resource_from_claims(_claims) do
-    {:error, :not_implemented}
+  def resource_from_claims(%{"sub" => id}) do
+    case Repo.get!(User, id) do
+      nil -> {:error, :resource_not_found}
+      user -> {:ok, user}
+    end
   end
 end
 
 defmodule DoctorsApi.Guardian.AuthPipeline do
   @claims %{typ: "access"}
 
-  use Guardian.Plug.Pipeline, otp_app: :doctors_api,
+  use Guardian.Plug.Pipeline,
+    otp_app: :doctors_api,
     module: DoctorsApi.Guardian,
     error_handler: DoctorsApi.Guardian.AuthErrorHandler
 
+  # If there is a session token, restrict it to an access token and validate it
   plug Guardian.Plug.VerifySession, claims: @claims
+  # If there is an authorization header, restrict it to an access token and validate it
   plug Guardian.Plug.VerifyHeader, claims: @claims, realm: "Bearer"
-  plug Guardian.Plug.EnsureAuthenticated
-  plug Guardian.Plug.LoadResource, ensure: true
+  # Load the user if either of the verifications worked
+  plug Guardian.Plug.LoadResource, allow_blank: true
 end
 
 defmodule DoctorsApi.Guardian.AuthErrorHandler do

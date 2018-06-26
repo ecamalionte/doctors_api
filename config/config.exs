@@ -23,9 +23,10 @@ config :logger, :console,
   metadata: [:request_id]
 
 # Configures Guardian for API Authentication
-config :guardian, DoctorsApi.Guardian,
-  issuer: "DoctorsApi",
-  secret_key: "csPOKcLdIvGTb+zlHrV0ZLOox+mi7cQu0oURWz/O78gIRyJpX7SOMstKIGryfwtI"
+config :doctors_api, DoctorsApi.Guardian,
+  issuer: "doctors_api",
+  secret_key: "PBX8hd0cy/Lfjrv1KYjnlPaAthcHiKEWdRoYQ92utq5snvpf2BriEj865zau7rox",
+  ttl: {30, :minutes}
 
 
 # Import environment specific config. This must remain at the bottom
