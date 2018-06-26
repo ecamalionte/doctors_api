@@ -1,17 +1,24 @@
 defmodule DoctorsApi.UserControllerTest do
   use DoctorsApi.ConnCase
+  import DoctorsApi.Factory
 
   alias DoctorsApi.User
+  alias DoctorsApi.Guardian
+
   @valid_attrs %{name: "some content", email: "some content", login: "some content", password: "some content"}
   @invalid_attrs %{}
 
   setup %{conn: conn} do
-    {:ok, conn: put_req_header(conn, "accept", "application/json")}
+    user = insert(:doctor)
+    new_conn = Guardian.Plug.sign_in(conn, user)
+    put_req_header(new_conn, "accept", "application/json")
+    put_req_header(new_conn, "authorization", "Bearer: #{Guardian.Plug.current_token(new_conn)}")
+    {:ok, conn: new_conn}
   end
 
   test "lists all entries on index", %{conn: conn} do
     conn = get conn, user_path(conn, :index)
-    assert json_response(conn, 200)["data"] == []
+    assert json_response(conn, 200)["data"] != []
   end
 
   test "shows chosen resource", %{conn: conn} do
