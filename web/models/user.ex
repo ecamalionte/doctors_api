@@ -33,4 +33,13 @@ defmodule DoctorsApi.User do
       _ -> changeset
     end
   end
+
+  def to_map(user) do
+    %{
+      id: user.id,
+      name: user.name,
+      login: user.login,
+      email: user.email
+    }
+  end
 end

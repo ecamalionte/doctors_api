@@ -1,28 +1,30 @@
 defmodule DoctorsApi.SessionsControllerTest do
   use DoctorsApi.ConnCase
-  import DoctorsApi.Factory
 
-  alias DoctorsApi.Guardian
+  describe "#create" do
+    test "guardian registration and login flow", %{conn: conn} do
+      registration_params = %{
+        user: %{
+          name: "name",
+          email: "email",
+          login: "login",
+          password: "secret"
+        }
+      }
 
-  test "guardian registration and login flow", %{conn: conn} do
-    registration_params = %{
-      user: %{
-        name: "name",
-        email: "email",
+      conn = post conn, "/api/accounts/register", registration_params
+
+      login_params = %{
         login: "login",
         password: "secret"
       }
-    }
 
-    conn = post conn, "/api/register", registration_params
+      conn = post conn, "/api/accounts/login", login_params
+      token = json_response(conn, 201)["token"]
+      assert String.length(token) == 343
 
-    login_params = %{
-      login: "login",
-      password: "secret"
-    }
-
-    conn = post conn, "/api/login", login_params
-    token = json_response(conn, 201)["token"]
-    assert String.length(token) == 343
+      user = json_response(conn, 201)["user"]
+      assert user["login"] == "login"
+    end
   end
 end

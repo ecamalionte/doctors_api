@@ -12,7 +12,7 @@ defmodule DoctorsApi.SessionsController do
 
         new_conn
         |> put_status(:created)
-        |> json(%{token: token})
+        |> json(%{token: token, user: User.to_map(user)})
       _ ->
         conn
         |> put_status(:unauthorized)
