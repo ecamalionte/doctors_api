@@ -26,7 +26,7 @@ defmodule DoctorsApi.UserController do
 
   def show(conn, %{"id" => id}) do
     user = Repo.get!(User, id)
-    render(conn, "show.json", user: user)
+    json(conn, %{ user: User.to_map(user) })
   end
 
   def update(conn, %{"id" => id, "user" => user_params}) do
