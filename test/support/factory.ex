@@ -28,4 +28,11 @@ defmodule DoctorsApi.Factory do
       name: "Doctor <--> Patient Communication",
     }
   end
+
+  def user_channel_factory do
+    %Channel{
+      name: "some_cool_name",
+      users: [ build(:patient) ]
+    }
+  end
 end

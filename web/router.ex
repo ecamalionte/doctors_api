@@ -1,20 +1,6 @@
 defmodule DoctorsApi.Router do
   use DoctorsApi.Web, :router
 
-  pipeline :browser do
-    plug :accepts, ["html"]
-    plug :fetch_session
-    plug :fetch_flash
-    plug :protect_from_forgery
-    plug :put_secure_browser_headers
-  end
-
-  scope "/", DoctorsApi do
-    pipe_through :browser # Use the default browser stack
-    get "/", PageController, :index
-  end
-
-
   pipeline :api do
     plug :accepts, ["json"]
   end
@@ -29,10 +15,6 @@ defmodule DoctorsApi.Router do
     plug Guardian.Plug.EnsureAuthenticated
   end
 
-  scope "/api", DoctorsApi do
-    pipe_through :api
-  end
-
   # Maybe logged in routes
   scope "/api", DoctorsApi do
     pipe_through [:api, :auth]
@@ -45,7 +27,11 @@ defmodule DoctorsApi.Router do
   # Definitely logged in routes
   scope "/api", DoctorsApi do
     pipe_through [:api, :auth, :ensure_authenticated]
-    resources "/users", UserController
+
+    resources "/users", UserController do
+      resources "/channels", UserChannelsController, only: [:index], as: :channels
+    end
+
     delete "/accounts/logout", SessionsController, :delete
   end
 end

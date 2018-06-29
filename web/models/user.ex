@@ -1,6 +1,9 @@
 defmodule DoctorsApi.User do
   use DoctorsApi.Web, :model
 
+  alias DoctorsApi.Channel
+  alias DoctorsApi.UserChannel
+
   schema "users" do
     field :name, :string
     field :email, :string
@@ -10,7 +13,7 @@ defmodule DoctorsApi.User do
 
     timestamps()
 
-    many_to_many :channels, DoctorsApi.Channel, join_through: "users_channels"
+    many_to_many :channels, Channel, join_through: UserChannel
   end
 
   @doc """

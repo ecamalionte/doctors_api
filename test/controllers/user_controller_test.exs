@@ -26,7 +26,7 @@ defmodule DoctorsApi.UserControllerTest do
            |> Repo.insert!
 
     conn = get conn, user_path(conn, :show, user)
-    assert json_response(conn, 200)["data"] == %{"id" => user.id,
+    assert json_response(conn, 200)["user"] == %{"id" => user.id,
       "name" => user.name,
       "email" => user.email,
       "login" => user.login}
