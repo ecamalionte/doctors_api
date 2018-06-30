@@ -13,6 +13,14 @@ defmodule DoctorsApi.AuthManager do
     Guardian.resource_from_token(token)
   end
 
+  def authenticate_user(login, password) do
+    user = Repo.get_by(User, login: login)
+    case check_password(user, password) do
+      true -> {:ok, user}
+      _ -> {:error, :unauthorized}
+    end
+  end
+
   def authenticate_channel(channel_id, user_id) do
     user = Repo.get(User, user_id)
     |> Repo.preload(:channels)
@@ -28,5 +36,10 @@ defmodule DoctorsApi.AuthManager do
   defp has_association?(_, nil) do {:error, :invalid_channel} end
   defp has_association?(user, channel_id) do
     Enum.any?(user.channels, fn(channel) -> channel.id == channel_id end)
+  end
+
+  defp check_password(nil, _), do: false
+  defp check_password(user, password) do
+    Comeonin.Bcrypt.checkpw(password, user.password_hash)
   end
 end

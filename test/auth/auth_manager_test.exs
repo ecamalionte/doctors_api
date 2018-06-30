@@ -1,8 +1,7 @@
-
 defmodule DoctorsApi.AuthManagerTest do
   use DoctorsApi.ConnCase
   import DoctorsApi.Factory
-  alias DoctorsApi.{ AuthManager, Guardian }
+  alias DoctorsApi.{AuthManager, Guardian, User}
 
   describe "user_id_from_token" do
     test "extract user_id from token" do
@@ -31,11 +30,24 @@ defmodule DoctorsApi.AuthManagerTest do
     end
   end
 
+  describe "authenticate_user" do
+    test "existing user" do
+      user_attrs = build(:doctor)
+      |> User.to_map
+      |> Map.merge(%{password: "secret"})
+
+      user = User.changeset(%User{}, user_attrs)
+      |> Repo.insert!
+
+      {authenticated, _ } = AuthManager.authenticate_user(user.login, user.password)
+      assert authenticated == :ok
+    end
+  end
+
   describe "authenticate_channel" do
     test "join only user associated with channel" do
       channel = insert(:user_channel)
       user = List.first(channel.users)
-
       resp = AuthManager.authenticate_channel(channel.id, user.id)
       assert resp == {:ok, :authorized }
     end
@@ -43,7 +55,6 @@ defmodule DoctorsApi.AuthManagerTest do
     test "unauthorize user" do
       channel = insert(:channel)
       user = insert(:doctor)
-
       resp = AuthManager.authenticate_channel(channel.id, user.id)
       assert resp == {:error, :unauthorized}
     end
