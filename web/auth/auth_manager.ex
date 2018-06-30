@@ -1,3 +1,4 @@
+require IEx
 defmodule DoctorsApi.AuthManager do
   alias DoctorsApi.{Repo, User, Channel, Guardian}
 

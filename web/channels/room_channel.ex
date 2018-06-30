@@ -1,16 +1,23 @@
 defmodule DoctorsApi.RoomChannel do
   use Phoenix.Channel
 
+  alias Guardian.Phoenix.Socket
+  alias DoctorsApi.AuthManager
+
   def join("room:" <> channel_id, %{"token" => token}, socket) do
-    {:ok, claims} = DoctorsApi.Guardian.decode_and_verify(token)
-    user_id = claims["sub"]
-    case Guardian.Phoenix.Socket.authenticate(socket, DoctorsApi.Guardian, token) do
-      {:ok, authed_socket} -> {:ok, authed_socket}
-      {:error, reason} -> { :error, reason: reason }
+    channel_id = String.to_integer(channel_id)
+
+    with {:ok, user_id} <- AuthManager.user_id_from_token(token),
+         {:ok, _} <- AuthManager.authenticate_channel(channel_id, user_id),
+         {:ok, authed_socket} <- Socket.authenticate(socket, DoctorsApi.Guardian, token)
+      do
+        {:ok, authed_socket}
+      else
+        error -> error
     end
   end
 
-  def join(room, _params, socket), do: {:error, %{reason: "token not found"}}
+  def join(room, _params, socket), do: {:error, :token_not_found}
 
   def handle_in("new_message", %{ "body" => body, "user" => user }, socket) do
     broadcast! socket, "new_message", %{body: body, user: user}
