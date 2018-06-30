@@ -1,7 +1,9 @@
 defmodule DoctorsApi.RoomChannel do
   use Phoenix.Channel
 
-  def join(room, %{"token" => token}, socket) do
+  def join("room:" <> channel_id, %{"token" => token}, socket) do
+    {:ok, claims} = DoctorsApi.Guardian.decode_and_verify(token)
+    user_id = claims["sub"]
     case Guardian.Phoenix.Socket.authenticate(socket, DoctorsApi.Guardian, token) do
       {:ok, authed_socket} -> {:ok, authed_socket}
       {:error, reason} -> { :error, reason: reason }
