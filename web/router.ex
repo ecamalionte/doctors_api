@@ -1,28 +1,37 @@
 defmodule DoctorsApi.Router do
   use DoctorsApi.Web, :router
 
-  pipeline :browser do
-    plug :accepts, ["html"]
-    plug :fetch_session
-    plug :fetch_flash
-    plug :protect_from_forgery
-    plug :put_secure_browser_headers
-  end
-
   pipeline :api do
     plug :accepts, ["json"]
   end
 
-  scope "/", DoctorsApi do
-    pipe_through :browser # Use the default browser stack
-
-    get "/", PageController, :index
+  # this is a "maybe" authenticated pipeline
+  pipeline :auth do
+    plug DoctorsApi.Guardian.AuthPipeline
   end
 
-  # Other scopes may use custom stacks.
+  # Use ensure auth to fail if there is no one logged in
+  pipeline :ensure_authenticated do
+    plug Guardian.Plug.EnsureAuthenticated
+  end
+
+  # Maybe logged in routes
   scope "/api", DoctorsApi do
-    pipe_through :api
+    pipe_through [:api, :auth]
 
     get "/", WelcomeApiController, :index
+    post "/accounts/register", UserController, :create
+    post "/accounts/login", SessionsController, :create
+  end
+
+  # Definitely logged in routes
+  scope "/api", DoctorsApi do
+    pipe_through [:api, :auth, :ensure_authenticated]
+
+    resources "/users", UserController do
+      resources "/channels", UserChannelsController, only: [:index], as: :channels
+    end
+
+    delete "/accounts/logout", SessionsController, :delete
   end
 end
