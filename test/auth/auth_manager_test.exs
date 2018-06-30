@@ -4,21 +4,30 @@ defmodule DoctorsApi.AuthManagerTest do
   import DoctorsApi.Factory
   alias DoctorsApi.{ AuthManager, Guardian }
 
-  describe "user_id_by_token" do
-    test "extract user_id by token" do
+  describe "user_id_from_token" do
+    test "extract user_id from token" do
       user = insert(:doctor)
       {:ok, token, _}  = Guardian.encode_and_sign(user)
-      {:ok, user_id} = AuthManager.user_id_by_token(token)
+      {:ok, user_id} = AuthManager.user_id_from_token(token)
       assert user_id == user.id
     end
 
     test "invalid token" do
       invalid_token = "invalid token"
-      resp = AuthManager.user_id_by_token(invalid_token)
+      resp = AuthManager.user_id_from_token(invalid_token)
       assert resp == {
         :error,
         %ArgumentError{message: "argument error: [\"invalid token\"]"}
       }
+    end
+  end
+
+  describe "user_from_token" do
+    test "get user from a valid token" do
+      new_user = insert(:doctor)
+      {:ok, token, _}  = Guardian.encode_and_sign(new_user)
+      {:ok, user, _} = AuthManager.user_from_token(token)
+      assert new_user.id == user.id
     end
   end
 
