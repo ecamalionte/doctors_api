@@ -3,8 +3,11 @@ defmodule DoctorsApi.AuthManager do
 
 
   def user_id_by_token(token) do
+    #resource = Guardian.resource_from_token(token)
+    #IO.inspect(resource)
     case Guardian.decode_and_verify(token) do
-      {:ok, %{"sub" => user_id}} -> user_id
+      {:ok, %{"sub" => user_id}} -> {:ok, String.to_integer(user_id)}
+      error -> error
     end
   end
 
