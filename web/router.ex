@@ -31,7 +31,5 @@ defmodule DoctorsApi.Router do
     resources "/users", UserController do
       resources "/channels", UserChannelsController, only: [:index], as: :channels
     end
-
-    delete "/accounts/logout", SessionsController, :delete
   end
 end

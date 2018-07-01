@@ -17,7 +17,4 @@ defmodule DoctorsApi.SessionsController do
         |> put_status(:unauthorized)
     end
   end
-
-  def delete do
-  end
 end

@@ -16,4 +16,8 @@ defmodule DoctorsApi.RoomChannelTest do
      assert socket.assigns.guardian_default_claims["sub"] == Integer.to_string(user.id)
      assert socket.assigns.guardian_default_resource.name == user.name
   end
+
+  test "connection failure message" do
+    assert :error == connect(UserSocket, %{})
+  end
 end
