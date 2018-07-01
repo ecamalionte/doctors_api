@@ -2,14 +2,7 @@ defmodule DoctorsApi.UserChannelsControllerTest do
   use DoctorsApi.ConnCase
   import DoctorsApi.Factory
 
-  alias DoctorsApi.{Guardian, User}
-
-  @user_valid_attrs %{
-    name: "some content",
-    email: "some content",
-    login: "some content",
-    password: "some content"
-  }
+  alias DoctorsApi.Guardian
 
   setup %{conn: conn} do
     user = insert(:doctor)
