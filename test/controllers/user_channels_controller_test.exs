@@ -23,7 +23,10 @@ defmodule DoctorsApi.UserChannelsControllerTest do
     channel = insert(:user_channel)
     user = channel.users |> List.first
 
-    expected_response = [ %{"id" => channel.id, "name" => channel.name} ]
+    expected_response = [ %{"id" => channel.id,
+                            "name" => channel.name,
+                            "topic" => "room:#{channel.id}"}
+                        ]
 
     conn = get conn, user_channels_path(conn, :index, user.id)
     assert json_response(conn, 200) == expected_response

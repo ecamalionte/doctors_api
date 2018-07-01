@@ -7,7 +7,9 @@ defmodule DoctorsApi.UserChannelsController do
     user = Repo.get(User, params["user_id"]) |> Repo.preload(:channels)
 
     channels = Enum.map(
-      user.channels, fn (chn) -> %{id: chn.id, name: chn.name} end
+      user.channels, fn (chn) ->
+        %{id: chn.id, name: chn.name, topic: "room:#{chn.id}" }
+      end
     )
 
     json conn, channels
