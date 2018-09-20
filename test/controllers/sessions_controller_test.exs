@@ -21,7 +21,7 @@ defmodule DoctorsApi.SessionsControllerTest do
 
       conn = post conn, "/api/accounts/login", login_params
       token = json_response(conn, 201)["token"]
-      assert String.length(token) == 343
+      assert String.length(token) == 342
     end
   end
 end
